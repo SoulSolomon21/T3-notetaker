@@ -23,7 +23,7 @@ const Home: NextPage = () => {
 
 export default Home;
 
-type Topic = RouterOutputs["topic"]["getAll"][0]
+type Topic = RouterOutputs["topic"]["getAll"][0];
 
 const Content: React.FC = () => {
   const { data: sessionData } = useSession();
@@ -34,9 +34,9 @@ const Content: React.FC = () => {
     undefined, //no input
     {
       enabled: sessionData?.user !== undefined,
-      onSuccess : (data) => {
-        setSelectedTopic(selectedTopic ?? data[0] ?? null)
-      }
+      onSuccess: (data) => {
+        setSelectedTopic(selectedTopic ?? data[0] ?? null);
+      },
     }
   );
 
@@ -56,7 +56,7 @@ const Content: React.FC = () => {
                 href="#"
                 onClick={(evt) => {
                   evt.preventDefault();
-                  setSelectedTopic(topic)
+                  setSelectedTopic(topic);
                 }}
               >
                 {topic.title}
