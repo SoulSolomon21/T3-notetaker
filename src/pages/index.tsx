@@ -1,9 +1,10 @@
 import { type NextPage } from "next";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { Header } from "~/components/Header";
+import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-
   return (
     <>
       <Head>
@@ -13,9 +14,63 @@ const Home: NextPage = () => {
       </Head>
       <main>
         <Header />
+        <Content />
       </main>
     </>
   );
 };
 
 export default Home;
+
+const Content: React.FC = () => {
+  const { data: sessionData } = useSession();
+
+  const { data: topics, refetch: refetchTopics } = api.topic.getAll.useQuery(
+    undefined, //no input
+    {
+      enabled: sessionData?.user !== undefined,
+    }
+  );
+
+  const createTopic = api.topic.create.useMutation({
+    onSuccess: () => {
+      refetchTopics()
+    }
+  });
+
+  return (
+    <div className="mx-5 mt-5 grid grid-cols-4 gap-2">
+      <div className="px-2 ">
+        <ul className="menu rounded-box w-56 bg-base-100 p-2">
+          {topics?.map((topic) => (
+            <li key={topic.id}>
+              <a
+                href="#"
+                onClick={(evt) => {
+                  evt.preventDefault();
+                }}
+              >
+                {topic.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div className="divider"></div>
+        <input
+          type="text"
+          placeholder="New Topic"
+          className="input-bordered input input-sm w-full"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              createTopic.mutate({
+                title: e.currentTarget.value,
+              });
+              e.currentTarget.value = "";
+            }
+          }}
+        />
+      </div>
+      <div className="col-span-3"></div>
+    </div>
+  );
+};

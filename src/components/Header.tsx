@@ -15,7 +15,7 @@ export const Header = () => {
                         className="btn-ghost btn-circlr avatar btn"
                         onClick={() => void signOut()}
                         >
-                            <div>
+                            <div className="w-10 rounded-full">
                                 <img 
                                 src={sessionData?.user?.image ?? ""} 
                                 alt={sessionData?.user?.image ?? ""} 
